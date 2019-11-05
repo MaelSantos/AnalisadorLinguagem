@@ -1,0 +1,87 @@
+package br.edu.analisador.model;
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linha, Citacoes, Tipo_Dado, Int, Caractere, If, Else, Do, While, For,
+    Igual, Soma, Subtracao, Multiplicacao, Divisao, Op_Logico, Op_Relacional,
+    Op_Atribuicao, Op_Incremento, Op_Booleano, Parenteses_Abrir, Parenteses_Fechar,
+    Chave_Abrir, Chave_Fechar, Colchete_Abrir, Colchete_Fechar, Main, Fim_Comando, Identificador,
+    Numero, Erro;
+non terminal INICIO, SENTENCA, DECLARACAO, DECLARACAO_FOR, IF, IF_ELSE,
+    WHILE, DO_WHILE, FOR, SENTENCA_BOOLEANA, SENTENCA_FOR;
+
+start with INICIO;
+
+INICIO ::= 
+    Int Main Parenteses_Abrir Parenteses_Fechar Chave_Abrir SENTENCA Chave_Fechar |
+    Main Parenteses_Abrir Parenteses_Fechar Chave_Abrir SENTENCA Chave_Fechar
+;
+SENTENCA ::= 
+    SENTENCA DECLARACAO |
+    DECLARACAO |
+    SENTENCA IF | 
+    IF |
+    SENTENCA IF_ELSE |
+    IF_ELSE |
+    SENTENCA WHILE |
+    WHILE |
+    SENTENCA DO_WHILE
+    DO_WHILE |
+    SENTENCA FOR |
+    FOR
+;
+DECLARACAO ::= 
+    Int Identificador Fim_Comando | 
+    Int Identificador Op_Atribuicao Numero Fim_Comando |
+    Int Identificador Igual Numero Fim_Comando |
+    Int Identificador Op_Incremento Fim_Comando | 
+    Int Op_Incremento Identificador Fim_Comando |   
+    Tipo_Dado Identificador Fim_Comando | 
+    Tipo_Dado Identificador Op_Atribuicao Numero Fim_Comando |
+    Tipo_Dado Identificador Igual Numero Fim_Comando |
+    Tipo_Dado Identificador Op_Incremento Fim_Comando | 
+    Tipo_Dado Op_Incremento Identificador Fim_Comando |    
+    Caractere Identificador Op_Atribuicao Citacoes Citacoes Fim_Comando |
+    Caractere Identificador Igual Citacoes Citacoes Fim_Comando |
+    Caractere Identificador Op_Atribuicao Citacoes Identificador Citacoes Fim_Comando |
+    Caractere Identificador Igual Citacoes Identificador Citacoes Fim_Comando
+;
+IF ::= If Parenteses_Abrir SENTENCA_BOOLEANA Parenteses_Fechar Chave_Abrir SENTENCA Chave_Fechar
+;
+SENTENCA_BOOLEANA ::= 
+    Op_Booleano | 
+    Identificador Op_Relacional Op_Booleano |
+    Identificador Op_Relacional Numero |
+    Identificador Op_Relacional Identificador |
+    Identificador Op_Relacional Citacoes Citacoes |
+    Identificador Op_Relacional Citacoes Identificador Citacoes
+;
+IF_ELSE ::= If Parenteses_Abrir SENTENCA_BOOLEANA Parenteses_Fechar Chave_Abrir SENTENCA Chave_Fechar Else Chave_Abrir SENTENCA Chave_Fechar
+;
+WHILE ::= While Parenteses_Abrir SENTENCA_BOOLEANA Parenteses_Fechar Chave_Abrir SENTENCA Chave_Fechar
+;
+DO_WHILE ::= Do Chave_Abrir SENTENCA Chave_Fechar While Parenteses_Abrir SENTENCA_BOOLEANA Parenteses_Fechar Fim_Comando
+;
+FOR ::= For Parenteses_Abrir SENTENCA_FOR Parenteses_Fechar Chave_Abrir SENTENCA Chave_Fechar
+;
+SENTENCA_FOR ::=
+    Tipo_Dado Identificador Igual Numero Fim_Comando SENTENCA_BOOLEANA Fim_Comando DECLARACAO_FOR |
+    Identificador Igual Numero Fim_Comando SENTENCA_BOOLEANA Fim_Comando DECLARACAO_FOR
+;
+DECLARACAO_FOR ::= 
+    Identificador Op_Atribuicao Numero |
+    Identificador Op_Incremento | 
+    Op_Incremento Identificador
+;

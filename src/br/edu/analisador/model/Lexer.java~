@@ -9,7 +9,7 @@ import static br.edu.analisador.model.Tokens.*;
  * on 05/11/19 14:21 from the specification file
  * <tt>/media/mael/MAMA/Util/Projetos Java/AnalisadorLinguagem/src/br/edu/analisador/model/Lexer.flex</tt>
  */
-public class Lexer {
+class Lexer {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -295,7 +295,7 @@ public class Lexer {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-    public Lexer(java.io.Reader in) {
+  Lexer(java.io.Reader in) {
     this.zzReader = in;
   }
 
